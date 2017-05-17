@@ -1,0 +1,19 @@
+plugins {
+	id "java-gradle-plugin"
+}
+
+apply plugin: 'groovy'
+apply plugin: 'maven'
+
+group = 'org.tutske.gradle'
+version = 'git describe --dirty'.execute ().text.trim ();
+sourceCompatibility = 1.8
+
+gradlePlugin {
+	plugins {
+		simplePlugin {
+			id = "org.tutske.gradle"
+			implementationClass = "org.tutske.gradle.StructurePlugin"
+		}
+	}
+}
