@@ -107,11 +107,11 @@ class StructurePluginImpl implements Plugin<Project> {
 		}
 
 		project.task ('it', type: Test, dependsOn: ['assemble', 'itJar', 'copyDeps', 'copyItDeps'] ) {
-			testClassesDir = project.sourceSets.integration.output.classesDir
+			testClassesDirs = project.sourceSets.integration.output.classesDirs
 			classpath = project.sourceSets.integration.runtimeClasspath
 			environment 'TEST_JAR_PATH', project.itJar.archivePath
 			onOutput { descriptor, event -> print (event.message) }
-			reports.html.destination = "${project.buildDir}/integration-report"
+			reports.html.destination = new File ("${project.buildDir}/integration-report")
 			outputs.upToDateWhen { false }
 		}
 	}
