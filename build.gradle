@@ -1,5 +1,5 @@
 plugins {
-	id "java-gradle-plugin"
+	id 'java-gradle-plugin'
 }
 
 apply plugin: 'groovy'
@@ -12,8 +12,19 @@ sourceCompatibility = 1.8
 gradlePlugin {
 	plugins {
 		simplePlugin {
-			id = "org.tutske.gradle"
-			implementationClass = "org.tutske.gradle.StructurePlugin"
+			id = 'org.tutske.gradle'
+			implementationClass = 'org.tutske.gradle.StructurePlugin'
+		}
+	}
+}
+
+uploadArchives {
+	doFirst {
+		def isDirty = project.version.endsWith ('-dirty')
+		repositories.mavenDeployer {
+			repository (url: "http://nexus.tutske.org:10080/repository/maven-${isDirty ? 'snapshots' : 'releases'}") {
+				authentication (userName: mavenUser, password: mavenPass)
+			}
 		}
 	}
 }
