@@ -1,27 +1,12 @@
 package org.tutske.gradle
 
-import java.nio.file.Files
-import java.nio.file.Path
-import java.nio.file.Paths
-
 
 class Config {
 
-	private static final String PREFIX = "TG_"
-	private static final String filename = System.getenv ().containsKey (PREFIX + "C") ?
-		System.getenv (PREFIX + "C") :
-		System.getProperty ("user.home") + "/.tg.properties"
-
-	private static final Properties properties = new Properties ()
-
-	static {
-		Path path = Paths.get (filename)
-		if ( ! Files.exists (path) || ! Files.isRegularFile (path) ) { return }
-		Files.newInputStream (path).withCloseable { s -> properties.load (s) }
-	}
+	private static final Properties properties = PropertiesInitializer.collectProperties ();
 
 	private static GString findProperty (String name, GString otherwise) {
-		def val = System.getenv (PREFIX + name)
+		def val = System.getenv (PropertiesInitializer.PREFIX + name)
 		if ( val == null ) { val = properties.getProperty (name) }
 		if ( val == null ) { val = otherwise }
 		return val instanceof  GString ? val : GString.EMPTY + val;
@@ -29,9 +14,9 @@ class Config {
 
 	public static class Urls {
 		def String base = findProperty ("MAVEN_BASE_URL", GString.EMPTY + "http://localhost:8081/repository")
-		def GString repo = findProperty ("MAVEN_PUBLIC_URL", "${-> base}/public")
+		def GString repo = findProperty ("MAVEN_PUBLIC_URL", "${-> base}/maven-public")
 		def GString release = findProperty ("MAVEN_RELEASE_URL", "${-> base}/maven-releases")
-		def GString dirties = findProperty ("MAVEN_DIRTIES_URLt ", "${-> base}/dirties")
+		def GString dirties = findProperty ("MAVEN_DIRTIES_URLt ", "${-> base}/maven-snapshots")
 	}
 
 	public static class Credentials {
