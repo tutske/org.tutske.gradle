@@ -22,6 +22,10 @@ class StructurePluginImpl implements Plugin<Project> {
 		project.version = 'git describe --dirty'.execute ().text.trim ()
 		project.sourceCompatibility = 1.8
 
+		project.dependencyLocking {
+			lockAllConfigurations ()
+		}
+
 		setRepositories ()
 		setUploadConfig ()
 		addJarInfo ()
