@@ -17,10 +17,14 @@ class StructurePluginImpl implements Plugin<Project> {
 	void apply () {
 		project.apply (plugin: 'java')
 		project.apply (plugin: 'maven')
-		project.extensions.create ('structure', Config)
+		project.extensions.create ('tg', Config)
 
 		project.version = 'git describe --dirty'.execute ().text.trim ()
 		project.sourceCompatibility = 1.8
+
+		project.dependencyLocking {
+			lockAllConfigurations ()
+		}
 
 		setRepositories ()
 		setUploadConfig ()
@@ -36,7 +40,7 @@ class StructurePluginImpl implements Plugin<Project> {
 
 	void setRepositories () {
 		project.repositories {
-			maven { url "${->project.structure.urls.repo}" }
+			maven { url "${->project.tg.urls.repo}" }
 			mavenLocal ()
 		}
 	}
@@ -45,12 +49,12 @@ class StructurePluginImpl implements Plugin<Project> {
 		project.uploadArchives {
 			doFirst {
 				def isDirty = project.version.endsWith ('-dirty')
-				def url = isDirty ? "${->project.structure.urls.dirties}" : "${->project.structure.urls.release}"
+				def url = isDirty ? "${->project.tg.urls.dirties}" : "${->project.tg.urls.release}"
 				repositories.mavenDeployer {
 					repository (url: url) {
 						authentication (
-							userName: "${->project.structure.credentials.username}",
-							password: "${->project.structure.credentials.password}"
+							userName: "${->project.tg.credentials.username}",
+							password: "${->project.tg.credentials.password}"
 						)
 					}
 				}
@@ -64,7 +68,7 @@ class StructurePluginImpl implements Plugin<Project> {
 				manifest.attributes (
 					'Implementation-Title': project.rootProject.name,
 					'Implementation-Version': project.version,
-					'Implementation-Vendor': "${->project.structure.vendor}"
+					'Implementation-Vendor': "${->project.tg.vendor}"
 				)
 			}
 		}
@@ -107,11 +111,11 @@ class StructurePluginImpl implements Plugin<Project> {
 		}
 
 		project.task ('it', type: Test, dependsOn: ['assemble', 'itJar', 'copyDeps', 'copyItDeps'] ) {
-			testClassesDir = project.sourceSets.integration.output.classesDir
+			testClassesDirs = project.sourceSets.integration.output.classesDirs
 			classpath = project.sourceSets.integration.runtimeClasspath
 			environment 'TEST_JAR_PATH', project.itJar.archivePath
 			onOutput { descriptor, event -> print (event.message) }
-			reports.html.destination = "${project.buildDir}/integration-report"
+			reports.html.destination = new File ("${project.buildDir}/integration-report")
 			outputs.upToDateWhen { false }
 		}
 	}
