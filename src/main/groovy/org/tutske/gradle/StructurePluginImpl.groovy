@@ -41,7 +41,6 @@ class StructurePluginImpl implements Plugin<Project> {
 	void setRepositories () {
 		project.repositories {
 			maven { url "${->project.tg.urls.repo}" }
-			mavenLocal ()
 		}
 	}
 
