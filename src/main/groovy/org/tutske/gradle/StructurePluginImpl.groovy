@@ -65,7 +65,7 @@ class StructurePluginImpl implements Plugin<Project> {
 		project.jar {
 			doFirst {
 				manifest.attributes (
-					'Implementation-Title': project.rootProject.name,
+					'Implementation-Title': project.name,
 					'Implementation-Version': project.version,
 					'Implementation-Vendor': "${->project.tg.vendor}"
 				)
