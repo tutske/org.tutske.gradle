@@ -41,7 +41,6 @@ class StructurePluginImpl implements Plugin<Project> {
 	void setRepositories () {
 		project.repositories {
 			maven { url "${->project.tg.urls.repo}" }
-			mavenLocal ()
 		}
 	}
 
@@ -66,7 +65,7 @@ class StructurePluginImpl implements Plugin<Project> {
 		project.jar {
 			doFirst {
 				manifest.attributes (
-					'Implementation-Title': project.rootProject.name,
+					'Implementation-Title': project.name,
 					'Implementation-Version': project.version,
 					'Implementation-Vendor': "${->project.tg.vendor}"
 				)
