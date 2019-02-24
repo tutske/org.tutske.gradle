@@ -22,7 +22,6 @@ public class PropertiesInitializer {
 	public static final String filename = System.getenv ().containsKey (PREFIX + "C_FILE_NAME") ?
 		System.getenv (PREFIX + "C_FILE_NAME") : ".tg.properties";
 
-
 	public static Properties collectProperties () {
 		Logger logger = LoggerFactory.getLogger (Config.class);
 
