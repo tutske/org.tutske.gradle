@@ -19,7 +19,7 @@ class Config {
 
 	public class Dirs {
 		def String docs = "${-> findProperty ('dirs.docs', '/src/main/docs')}"
-		def String deps = "${-> findProperty ('dirs.deps', '/build/libs')}'"
+		def String deps = "${-> findProperty ('dirs.deps', '/build/libs')}"
 	}
 
 	private final Project project

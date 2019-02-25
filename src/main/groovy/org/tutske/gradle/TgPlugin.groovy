@@ -7,13 +7,9 @@ import org.gradle.api.tasks.Copy
 import org.gradle.api.tasks.bundling.Jar
 
 
-class TgPluginImpl implements Plugin<Project> {
+class TgPlugin implements Plugin<Project> {
 
 	private Project project
-
-	public TgPluginImpl (Project project) {
-		this.project = project
-	}
 
 	void apply (Project project) {
 		this.project = project
@@ -37,7 +33,7 @@ class TgPluginImpl implements Plugin<Project> {
 
 	void addCopyDepsTask () {
 		project.task ('copyDeps', type: Copy) {
-			from project.configurations.runtime
+			from project.configurations.runtimeClasspath
 			into "${project.projectDir}${->project.tg.dirs.deps}"
 		}
 	}
