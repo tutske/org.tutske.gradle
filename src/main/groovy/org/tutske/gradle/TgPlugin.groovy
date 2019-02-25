@@ -7,13 +7,9 @@ import org.gradle.api.tasks.Copy
 import org.gradle.api.tasks.bundling.Jar
 
 
-class TgPluginImpl implements Plugin<Project> {
+class TgPlugin implements Plugin<Project> {
 
 	private Project project
-
-	public TgPluginImpl (Project project) {
-		this.project = project
-	}
 
 	void apply (Project project) {
 		this.project = project
