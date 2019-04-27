@@ -17,7 +17,7 @@ class TgPlugin implements Plugin<Project> {
 	}
 
 	void apply () {
-		project.apply (plugin: 'java')
+		project.apply (plugin: 'java-library')
 		project.apply (plugin: 'maven-publish')
 
 		project.extensions.create ('tg', Config, project)
@@ -61,8 +61,8 @@ class TgPlugin implements Plugin<Project> {
 
 		project.publishing {
 			publications {
-				sources (MavenPublication) {
-					artifact project.jar
+				mavenJava (MavenPublication) {
+					from project.components.java
 					artifact project.sourcesJar
 					artifact project.documentationJar
 				}
