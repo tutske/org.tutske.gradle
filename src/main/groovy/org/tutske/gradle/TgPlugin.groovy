@@ -61,8 +61,8 @@ class TgPlugin implements Plugin<Project> {
 
 		project.publishing {
 			publications {
-				sources (MavenPublication) {
-					artifact project.jar
+				mavenJava (MavenPublication) {
+					from project.components.java
 					artifact project.sourcesJar
 					artifact project.documentationJar
 				}
