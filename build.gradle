@@ -21,7 +21,8 @@ publishing {
 		def repoUrl = project.hasProperty ('url') ? url : 'https://nexus.tutske.org:10443/repository'
 		def repoName = (
 			project.hasProperty ('repo') ? repo :
-			project.version.endsWith ('-dirty') ? 'maven-snapshots' :
+			project.version =~ /.*-dirty$/ ? 'maven-dirties' :
+			project.version =~ /.*(-pre-[0-9]*)?-g[A-Fa-f0-9]{7,}/ ? 'maven-pre-releases' :
 			'maven-releases'
 		)
 
