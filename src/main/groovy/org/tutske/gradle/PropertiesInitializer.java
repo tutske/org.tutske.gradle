@@ -18,9 +18,12 @@ import java.util.Properties;
 public class PropertiesInitializer {
 
 	public static final String PREFIX = "TG_";
-	public static final Path [] locations = { Paths.get ("."), Paths.get (System.getProperty ("user.home")) };
-	public static final String filename = System.getenv ().containsKey (PREFIX + "C_FILE_NAME") ?
-		System.getenv (PREFIX + "C_FILE_NAME") : ".tg.properties";
+	public static final String filename = System.getenv ().getOrDefault (PREFIX + "C_FILE_NAME", ".tg.properties");
+	public static final Path [] locations = {
+		Paths.get ("."),
+		Paths.get (System.getProperty ("user.home")),
+		Paths.get (System.getProperty ("user.home")).resolve (".rcs")
+	};
 
 	public static Properties collectProperties () {
 		Logger logger = LoggerFactory.getLogger (Config.class);

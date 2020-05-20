@@ -25,7 +25,7 @@ class TgPlugin implements Plugin<Project> {
 		project.version = 'git describe --dirty'.execute ().text.trim ()
 
 		project.dependencyLocking { lockAllConfigurations () }
-		project.repositories { maven { url "${->project.tg.urls.repo}" } }
+		project.repositories { maven { url "${->project.tg.nexus.base.url}" } }
 
 		addCopyDepsTask ()
 		setupArtifacts ()
@@ -33,7 +33,7 @@ class TgPlugin implements Plugin<Project> {
 
 	void addCopyDepsTask () {
 		project.task ('copyDeps', type: Copy) {
-			from project.configurations.runtimeClasspath
+			from project.configurations["${-> project.tg.depsConfiguration}"]
 			into "${project.projectDir}${->project.tg.dirs.deps}"
 		}
 	}
@@ -69,12 +69,16 @@ class TgPlugin implements Plugin<Project> {
 			}
 
 			repositories {
-				def isDirty = project.version.endsWith ('-dirty')
+				def repo = (
+					project.version =~ /.*-dirty$/ ? project.tg.nexus.snapshots :
+					project.version =~ /.*(-pre)?-g[A-Fa-f0-9]{7,}/ ? project.tg.nexus.betas :
+					project.tg.nexus.deploy
+				);
 				maven {
-					url isDirty ? "${->project.tg.urls.dirties}" : "${->project.tg.urls.release}"
+					url "${-> repo.url}"
 					credentials {
-						username "${->project.tg.credentials.username}"
-						password "${->project.tg.credentials.password}"
+						username "${-> repo.username}"
+						password "${-> repo.password}"
 					}
 				}
 			}
