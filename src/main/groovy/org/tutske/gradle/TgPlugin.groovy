@@ -29,6 +29,7 @@ class TgPlugin implements Plugin<Project> {
 		project.repositories { maven { url "${->project.tg.nexus.base.url}" } }
 
 		addCopyDepsTask ()
+		addSettingsTask ()
 		setupArtifacts ()
 		setupJacoco ()
 	}
@@ -93,6 +94,15 @@ class TgPlugin implements Plugin<Project> {
 				xml.enabled false
 				csv.enabled false
 				html.destination project.file ("${project.buildDir}/${project.tg.dirs.coverage}")
+			}
+		}
+	}
+
+	void addSettingsTask () {
+		project.task ('settings') {
+			doLast {
+				def password = project.getProperties ().get ("showPasswords")
+				project.tg.display ('yes' == password || 'true' == password);
 			}
 		}
 	}

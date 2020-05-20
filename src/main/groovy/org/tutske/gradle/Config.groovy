@@ -93,4 +93,50 @@ class Config {
 		return url.endsWith ("/") ? url.substring (0, url.length () - 1) : url
 	}
 
+	public void display (boolean showPassword) {
+		println "                  vendor: ${vendor}"
+		println "       depsConfiguration: ${depsConfiguration}"
+		println "               dirs.docs: ${dirs.docs}"
+		println "               dirs.deps: ${dirs.deps}"
+		println "           dirs.coverage: ${dirs.coverage}"
+
+		println ''
+
+		println "          nexus.location: ${nexus.location}"
+		println "          nexus.username: ${nexus.username}"
+		println "          nexus.password: ${nexus.password.isEmpty () ? "" : showPassword ? nexus.password : '********'}"
+
+		println ''
+
+		println "     nexus.base.location: ${nexus.base.location}"
+		println "         nexus.base.repo: ${nexus.base.repo}"
+		println "     nexus.base.username: ${nexus.base.username}"
+		println "     nexus.base.password: ${nexus.base.password.isEmpty () ? "" : showPassword ? nexus.base.password : '********'}"
+		println "          nexus.base.url: ${nexus.base.url}"
+
+		println ''
+
+		println "   nexus.deploy.location: ${nexus.deploy.location}"
+		println "       nexus.deploy.repo: ${nexus.deploy.repo}"
+		println "   nexus.deploy.username: ${nexus.deploy.username}"
+		println "   nexus.deploy.password: ${nexus.deploy.password.isEmpty () ? "" : showPassword ? nexus.deploy.password : '********'}"
+		println "        nexus.deploy.url: ${nexus.deploy.url}"
+
+		println ''
+
+		println "    nexus.betas.location: ${nexus.betas.location}"
+		println "        nexus.betas.repo: ${nexus.betas.repo}"
+		println "    nexus.betas.username: ${nexus.betas.username}"
+		println "    nexus.betas.password: ${nexus.betas.password.isEmpty () ? "" : showPassword ? nexus.betas.password : '********'}"
+		println "         nexus.betas.url: ${nexus.betas.url}"
+
+		println ''
+
+		println "nexus.snapshots.location: ${nexus.snapshots.location}"
+		println "    nexus.snapshots.repo: ${nexus.snapshots.repo}"
+		println "nexus.snapshots.username: ${nexus.snapshots.username}"
+		println "nexus.snapshots.password: ${nexus.snapshots.password.isEmpty () ? "" : showPassword ? nexus.snapshots.password : '********'}"
+		println "     nexus.snapshots.url: ${nexus.snapshots.url}"
+	}
+
 }
