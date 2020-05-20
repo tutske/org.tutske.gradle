@@ -52,7 +52,7 @@ class Config {
 		dirs.deps = "${-> stripTrailingSlash (findProperty ('dirs.deps', '/build/libs'))}"
 		dirs.coverage = "${-> stripTrailingSlash (findProperty ('dirs.coverage', '/reports/coverage'))}"
 
-		nexus.location = "${-> stripTrailingSlash (findProperty ('nexus.url', 'http://nexus.tutske.org:10080/repository'))}"
+		nexus.location = "${-> stripTrailingSlash (findProperty ('nexus.url', 'https://nexus.tutske.org:10443/repository'))}"
 		nexus.username = "${-> findProperty ('nexus.username', 'builder')}"
 		nexus.password = "${-> findProperty ('nexus.password', GString.EMPTY)}"
 

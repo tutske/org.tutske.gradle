@@ -6,7 +6,6 @@ plugins {
 
 group = 'org.tutske.gradle'
 version = 'git describe --dirty'.execute ().text.trim ();
-sourceCompatibility = 11
 
 gradlePlugin {
 	plugins {
@@ -19,7 +18,7 @@ gradlePlugin {
 
 publishing {
 	repositories {
-		def repoUrl = project.hasProperty ('url') ? url : 'http://nexus.tutske.org:10080/repository'
+		def repoUrl = project.hasProperty ('url') ? url : 'https://nexus.tutske.org:10443/repository'
 		def repoName = (
 			project.hasProperty ('repo') ? repo :
 			project.version.endsWith ('-dirty') ? 'maven-snapshots' :
