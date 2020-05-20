@@ -19,6 +19,7 @@ class TgPlugin implements Plugin<Project> {
 	void apply () {
 		project.apply (plugin: 'java-library')
 		project.apply (plugin: 'maven-publish')
+		project.apply (plugin: 'jacoco')
 
 		project.extensions.create ('tg', Config, project)
 
@@ -29,6 +30,7 @@ class TgPlugin implements Plugin<Project> {
 
 		addCopyDepsTask ()
 		setupArtifacts ()
+		setupJacoco ()
 	}
 
 	void addCopyDepsTask () {
@@ -83,7 +85,16 @@ class TgPlugin implements Plugin<Project> {
 				}
 			}
 		}
+	}
 
+	void setupJacoco () {
+		project.jacocoTestReport {
+			reports {
+				xml.enabled false
+				csv.enabled false
+				html.destination project.file ("${project.buildDir}/${project.tg.dirs.coverage}")
+			}
+		}
 	}
 
 }
