@@ -18,7 +18,7 @@ gradlePlugin {
 
 publishing {
 	repositories {
-		def repoUrl = project.hasProperty ('url') ? url : 'https://nexus.tutske.org:10443/repository'
+		def repoUrl = project.findProperty ('url') ?: 'https://nexus.tutske.org:10443/repository'
 		def repoName = (
 			project.hasProperty ('repo') ? repo :
 			project.version =~ /.*-dirty$/ ? 'maven-dirties' :
@@ -26,8 +26,8 @@ publishing {
 			'maven-releases'
 		)
 
-		def principal = project.hasProperty ('username') ? username : 'gradle'
-		def pass = project.hasProperty ('password') ? password : 'gradle'
+		def principal = project.findProperty ('username') ?: 'gradle'
+		def pass = project.findProperty ('password') ?: 'gradle'
 
 		maven {
 			url "${repoUrl}/${repoName}"
