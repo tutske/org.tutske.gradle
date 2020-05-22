@@ -34,13 +34,6 @@ class TgPlugin implements Plugin<Project> {
 		setupJacoco ()
 	}
 
-	void addCopyDepsTask () {
-		project.task ('copyDeps', type: Copy) {
-			from project.configurations["${-> project.tg.depsConfiguration}"]
-			into "${project.projectDir}${->project.tg.dirs.deps}"
-		}
-	}
-
 	void setupArtifacts () {
 		project.task ('sourcesJar', type: Jar) {
 			from project.sourceSets.main.java.srcDirs
@@ -95,6 +88,13 @@ class TgPlugin implements Plugin<Project> {
 				csv.enabled false
 				html.destination project.file ("${project.buildDir}/${project.tg.dirs.coverage}")
 			}
+		}
+	}
+
+	void addCopyDepsTask () {
+		project.task ('copyDeps', type: Copy) {
+			from project.configurations["${-> project.tg.depsConfiguration}"]
+			into "${project.projectDir}${->project.tg.dirs.deps}"
 		}
 	}
 
