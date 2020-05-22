@@ -26,12 +26,26 @@ class TgPlugin implements Plugin<Project> {
 		project.version = 'git describe --dirty'.execute ().text.trim ()
 
 		project.dependencyLocking { lockAllConfigurations () }
-		project.repositories { maven { url "${->project.tg.nexus.base.url}" } }
 
 		addCopyDepsTask ()
 		addSettingsTask ()
+		setupRepository ()
 		setupArtifacts ()
 		setupJacoco ()
+	}
+
+	void setupRepository () {
+		project.repositories {
+			maven {
+				url "${->project.tg.nexus.base.url}"
+				if ( ! project.tg.nexus.base.password.isEmpty () ) {
+					credentials {
+						username "${-> project.tg.nexus.base.username}"
+						password "${-> project.tg.nexus.base.password}"
+					}
+				}
+			}
+		}
 	}
 
 	void setupArtifacts () {
