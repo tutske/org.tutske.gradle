@@ -72,9 +72,11 @@ class TgPlugin implements Plugin<Project> {
 				);
 				maven {
 					url "${-> repo.url}"
-					credentials {
-						username "${-> repo.username}"
-						password "${-> repo.password}"
+					if ( ! repo.password.isEmpty () ) {
+						credentials {
+							username "${-> repo.username}"
+							password "${-> repo.password}"
+						}
 					}
 				}
 			}
