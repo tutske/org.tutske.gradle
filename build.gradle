@@ -6,7 +6,6 @@ plugins {
 
 group = 'org.tutske.gradle'
 version = 'git describe --dirty'.execute ().text.trim ();
-sourceCompatibility = 11
 
 gradlePlugin {
 	plugins {
@@ -19,15 +18,16 @@ gradlePlugin {
 
 publishing {
 	repositories {
-		def repoUrl = project.hasProperty ('url') ? url : 'http://nexus.tutske.org:10080/repository'
+		def repoUrl = project.findProperty ('url') ?: 'https://nexus.tutske.org:10443/repository'
 		def repoName = (
 			project.hasProperty ('repo') ? repo :
-			project.version.endsWith ('-dirty') ? 'maven-snapshots' :
+			project.version =~ /.*-dirty$/ ? 'maven-dirties' :
+			project.version =~ /.*(-pre-[0-9]*)?-g[A-Fa-f0-9]{7,}/ ? 'maven-pre-releases' :
 			'maven-releases'
 		)
 
-		def principal = project.hasProperty ('username') ? username : 'gradle'
-		def pass = project.hasProperty ('password') ? password : 'gradle'
+		def principal = project.findProperty ('username') ?: 'builder'
+		def pass = project.findProperty ('password') ?: ''
 
 		maven {
 			url "${repoUrl}/${repoName}"

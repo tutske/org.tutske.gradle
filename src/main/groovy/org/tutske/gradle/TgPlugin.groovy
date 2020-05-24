@@ -19,22 +19,32 @@ class TgPlugin implements Plugin<Project> {
 	void apply () {
 		project.apply (plugin: 'java-library')
 		project.apply (plugin: 'maven-publish')
+		project.apply (plugin: 'jacoco')
 
 		project.extensions.create ('tg', Config, project)
 
 		project.version = 'git describe --dirty'.execute ().text.trim ()
 
 		project.dependencyLocking { lockAllConfigurations () }
-		project.repositories { maven { url "${->project.tg.urls.repo}" } }
 
 		addCopyDepsTask ()
+		addSettingsTask ()
+		setupRepository ()
 		setupArtifacts ()
+		setupJacoco ()
 	}
 
-	void addCopyDepsTask () {
-		project.task ('copyDeps', type: Copy) {
-			from project.configurations.runtimeClasspath
-			into "${project.projectDir}${->project.tg.dirs.deps}"
+	void setupRepository () {
+		project.repositories {
+			maven {
+				url "${->project.tg.nexus.base.url}"
+				if ( ! project.tg.nexus.base.password.isEmpty () ) {
+					credentials {
+						username "${-> project.tg.nexus.base.username}"
+						password "${-> project.tg.nexus.base.password}"
+					}
+				}
+			}
 		}
 	}
 
@@ -69,17 +79,48 @@ class TgPlugin implements Plugin<Project> {
 			}
 
 			repositories {
-				def isDirty = project.version.endsWith ('-dirty')
+				def repo = (
+					project.version =~ /.*-dirty$/ ? project.tg.nexus.snapshots :
+					project.version =~ /.*(-pre)?-g[A-Fa-f0-9]{7,}/ ? project.tg.nexus.betas :
+					project.tg.nexus.deploy
+				);
 				maven {
-					url isDirty ? "${->project.tg.urls.dirties}" : "${->project.tg.urls.release}"
-					credentials {
-						username "${->project.tg.credentials.username}"
-						password "${->project.tg.credentials.password}"
+					url "${-> repo.url}"
+					if ( ! repo.password.isEmpty () ) {
+						credentials {
+							username "${-> repo.username}"
+							password "${-> repo.password}"
+						}
 					}
 				}
 			}
 		}
+	}
 
+	void setupJacoco () {
+		project.jacocoTestReport {
+			reports {
+				xml.enabled false
+				csv.enabled false
+				html.destination project.file ("${project.buildDir}/${project.tg.dirs.coverage}")
+			}
+		}
+	}
+
+	void addCopyDepsTask () {
+		project.task ('copyDeps', type: Copy) {
+			from project.configurations["${-> project.tg.depsConfiguration}"]
+			into "${project.projectDir}${->project.tg.dirs.deps}"
+		}
+	}
+
+	void addSettingsTask () {
+		project.task ('settings') {
+			doLast {
+				def password = project.getProperties ().get ("showPasswords")
+				project.tg.display ('yes' == password || 'true' == password);
+			}
+		}
 	}
 
 }
