@@ -26,8 +26,8 @@ publishing {
 			'maven-releases'
 		)
 
-		def principal = project.findProperty ('username') ?: 'gradle'
-		def pass = project.findProperty ('password') ?: 'gradle'
+		def principal = project.findProperty ('username') ?: 'builder'
+		def pass = project.findProperty ('password') ?: ''
 
 		maven {
 			url "${repoUrl}/${repoName}"
