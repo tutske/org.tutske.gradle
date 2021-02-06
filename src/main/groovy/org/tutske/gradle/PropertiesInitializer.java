@@ -39,8 +39,8 @@ public class PropertiesInitializer {
 
 		Arrays.stream (locations)
 			.map (location -> location.resolve (filename))
-			.filter (path -> Files.exists (path))
-			.filter (path -> Files.isRegularFile (path))
+			.filter (Files::exists)
+			.filter (Files::isRegularFile)
 			.forEachOrdered (paths::add);
 
 		Collections.reverse (paths);
