@@ -29,6 +29,10 @@ class Config {
 		def String coverage
 	}
 
+	public class Tools {
+		def String jacocoVersion
+	}
+
 	private final Project project
 	private final Properties properties
 
@@ -36,6 +40,7 @@ class Config {
 	def Dirs dirs;
 	def String vendor
 	def String depsConfiguration
+	def Tools tools
 
 	Config (Project project) {
 		this.project = project
@@ -44,6 +49,7 @@ class Config {
 
 		nexus = new Nexus ()
 		dirs = new Dirs ()
+		tools = new Tools ()
 
 		vendor = findProperty ('vendor', GString.EMPTY + "UNKNOWN")
 		depsConfiguration = findProperty ('depsConfiguration', 'runtimeClasspath')
@@ -52,12 +58,14 @@ class Config {
 		dirs.deps = "${-> stripTrailingSlash (findProperty ('dirs.deps', '/build/libs'))}"
 		dirs.coverage = "${-> stripTrailingSlash (findProperty ('dirs.coverage', '/reports/coverage'))}"
 
+		tools.jacocoVersion = "${-> findProperty ("tools.jacoco.version", "")}"
+
 		nexus.location = "${-> stripTrailingSlash (findProperty ('nexus.url', 'https://nexus.tutske.org:10443/repository'))}"
 		nexus.username = "${-> findProperty ('nexus.username', 'builder')}"
 		nexus.password = "${-> findProperty ('nexus.password', GString.EMPTY)}"
 
 		nexus.base.location = "${-> stripTrailingSlash (findProperty ('nexus.base.location', nexus.location))}"
-		nexus.base.repo = "${-> findProperty ('nexus.base.repo', 'maven-public')}"
+		nexus.base.repo = "${-> findProperty ('nexus.base.repo', 'maven-develop')}"
 		nexus.base.username = "${-> findProperty ('nexus.base.username', nexus.username)}"
 		nexus.base.password = "${-> findProperty ('nexus.base.password', GString.EMPTY)}"
 		nexus.base.url = "${-> findProperty ('nexus.base.url', nexus.base.location + '/' + nexus.base.repo)}"
@@ -75,7 +83,7 @@ class Config {
 		nexus.betas.url = "${-> findProperty ('nexus.betas.url', nexus.betas.location + '/' + nexus.betas.repo)}"
 
 		nexus.snapshots.location = "${-> stripTrailingSlash (findProperty ('nexus.snapshots.location', nexus.location))}"
-		nexus.snapshots.repo = "${-> findProperty ('nexus.snapshots.repo', 'maven-public')}"
+		nexus.snapshots.repo = "${-> findProperty ('nexus.snapshots.repo', 'maven-dirties')}"
 		nexus.snapshots.username = "${-> findProperty ('nexus.snapshots.username', nexus.username)}"
 		nexus.snapshots.password = "${-> findProperty ('nexus.snapshots.password', nexus.password)}"
 		nexus.snapshots.url = "${-> findProperty ('nexus.snapshots.url', nexus.snapshots.location + '/' + nexus.snapshots.repo)}"
@@ -99,6 +107,7 @@ class Config {
 		println "               dirs.docs: ${dirs.docs}"
 		println "               dirs.deps: ${dirs.deps}"
 		println "           dirs.coverage: ${dirs.coverage}"
+		println "    tools.jacoco.version: ${tools.jacocoVersion}"
 
 		println ''
 
