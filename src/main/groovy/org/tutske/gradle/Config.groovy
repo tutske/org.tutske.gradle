@@ -65,7 +65,7 @@ class Config {
 		nexus.password = "${-> findProperty ('nexus.password', GString.EMPTY)}"
 
 		nexus.base.location = "${-> stripTrailingSlash (findProperty ('nexus.base.location', nexus.location))}"
-		nexus.base.repo = "${-> findProperty ('nexus.base.repo', 'maven-public')}"
+		nexus.base.repo = "${-> findProperty ('nexus.base.repo', 'maven-develop')}"
 		nexus.base.username = "${-> findProperty ('nexus.base.username', nexus.username)}"
 		nexus.base.password = "${-> findProperty ('nexus.base.password', GString.EMPTY)}"
 		nexus.base.url = "${-> findProperty ('nexus.base.url', nexus.base.location + '/' + nexus.base.repo)}"
@@ -83,7 +83,7 @@ class Config {
 		nexus.betas.url = "${-> findProperty ('nexus.betas.url', nexus.betas.location + '/' + nexus.betas.repo)}"
 
 		nexus.snapshots.location = "${-> stripTrailingSlash (findProperty ('nexus.snapshots.location', nexus.location))}"
-		nexus.snapshots.repo = "${-> findProperty ('nexus.snapshots.repo', 'maven-public')}"
+		nexus.snapshots.repo = "${-> findProperty ('nexus.snapshots.repo', 'maven-dirties')}"
 		nexus.snapshots.username = "${-> findProperty ('nexus.snapshots.username', nexus.username)}"
 		nexus.snapshots.password = "${-> findProperty ('nexus.snapshots.password', nexus.password)}"
 		nexus.snapshots.url = "${-> findProperty ('nexus.snapshots.url', nexus.snapshots.location + '/' + nexus.snapshots.repo)}"
