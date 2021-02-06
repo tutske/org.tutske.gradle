@@ -18,7 +18,7 @@ import java.util.Properties;
 public class PropertiesInitializer {
 
 	public static final String PREFIX = "TG_";
-	public static final String filename = System.getenv ().getOrDefault (PREFIX + "C_FILE_NAME", ".tg.properties");
+	public static final String filename = System.getenv ().getOrDefault (PREFIX + "CONFIG_FILE", ".tg.properties");
 	public static final Path [] locations = {
 		Paths.get ("."),
 		Paths.get (System.getProperty ("user.home")),
@@ -31,8 +31,8 @@ public class PropertiesInitializer {
 		Properties properties = new Properties ();
 		List<Path> paths = new LinkedList<> ();
 
-		if ( System.getenv ().containsKey (PREFIX + "C") ) {
-			Path p = Paths.get (System.getenv (PREFIX + "C"));
+		if ( System.getenv ().containsKey (PREFIX + "CONFIG_FILE") ) {
+			Path p = Paths.get (System.getenv (PREFIX + "CONFIG_FILE"));
 			if ( Files.exists (p) && Files.isRegularFile (p) ) { paths.add (p); }
 			else { logger.warn ("Configuration file {} does not exist, skipping", p); }
 		}
