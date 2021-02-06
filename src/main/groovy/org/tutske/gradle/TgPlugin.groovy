@@ -98,6 +98,11 @@ class TgPlugin implements Plugin<Project> {
 	}
 
 	void setupJacoco () {
+		if ( ! project.tg.tools.jacocoVersion.isEmpty () ) {
+			project.jacoco {
+				toolVersion = project.tg.tools.jacocoVersion
+			}
+		}
 		project.jacocoTestReport {
 			reports {
 				xml.enabled false

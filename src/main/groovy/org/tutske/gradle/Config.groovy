@@ -29,6 +29,10 @@ class Config {
 		def String coverage
 	}
 
+	public class Tools {
+		def String jacocoVersion
+	}
+
 	private final Project project
 	private final Properties properties
 
@@ -36,6 +40,7 @@ class Config {
 	def Dirs dirs;
 	def String vendor
 	def String depsConfiguration
+	def Tools tools
 
 	Config (Project project) {
 		this.project = project
@@ -44,6 +49,7 @@ class Config {
 
 		nexus = new Nexus ()
 		dirs = new Dirs ()
+		tools = new Tools ()
 
 		vendor = findProperty ('vendor', GString.EMPTY + "UNKNOWN")
 		depsConfiguration = findProperty ('depsConfiguration', 'runtimeClasspath')
@@ -51,6 +57,8 @@ class Config {
 		dirs.docs = "${-> stripTrailingSlash (findProperty ('dirs.docs', '/src/main/docs'))}"
 		dirs.deps = "${-> stripTrailingSlash (findProperty ('dirs.deps', '/build/libs'))}"
 		dirs.coverage = "${-> stripTrailingSlash (findProperty ('dirs.coverage', '/reports/coverage'))}"
+
+		tools.jacocoVersion = "${-> findProperty ("tools.jacoco.version", "")}"
 
 		nexus.location = "${-> stripTrailingSlash (findProperty ('nexus.url', 'https://nexus.tutske.org:10443/repository'))}"
 		nexus.username = "${-> findProperty ('nexus.username', 'builder')}"
@@ -99,6 +107,7 @@ class Config {
 		println "               dirs.docs: ${dirs.docs}"
 		println "               dirs.deps: ${dirs.deps}"
 		println "           dirs.coverage: ${dirs.coverage}"
+		println "    tools.jacoco.version: ${tools.jacocoVersion}"
 
 		println ''
 
