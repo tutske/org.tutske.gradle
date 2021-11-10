@@ -105,8 +105,8 @@ class TgPlugin implements Plugin<Project> {
 		}
 		project.jacocoTestReport {
 			reports {
-				xml.enabled false
-				csv.enabled false
+				xml.required = false
+				csv.required = false
 				html.destination project.file ("${project.buildDir}/${project.tg.dirs.coverage}")
 			}
 		}
