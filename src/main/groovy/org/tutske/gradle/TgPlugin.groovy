@@ -25,7 +25,10 @@ class TgPlugin implements Plugin<Project> {
 
 		project.version = 'git describe --dirty'.execute ().text.trim ()
 
-		project.dependencyLocking { lockAllConfigurations () }
+		project.dependencyLocking {
+			lockFile = project.file("${project.projectDir}/gradle/dependencies.lockfile")
+			lockAllConfigurations ()
+		}
 
 		addCopyDepsTask ()
 		addSettingsTask ()
