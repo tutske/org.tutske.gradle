@@ -5,6 +5,7 @@ import org.gradle.api.Project
 import org.gradle.api.publish.maven.MavenPublication
 import org.gradle.api.tasks.Copy
 import org.gradle.api.tasks.bundling.Jar
+import org.gradle.api.tasks.testing.Test
 
 
 class TgPlugin implements Plugin<Project> {
@@ -20,6 +21,7 @@ class TgPlugin implements Plugin<Project> {
 		project.apply (plugin: 'java-library')
 		project.apply (plugin: 'maven-publish')
 		project.apply (plugin: 'jacoco')
+		project.apply (plugin: 'idea')
 
 		project.extensions.create ('tg', Config, project)
 
@@ -35,6 +37,7 @@ class TgPlugin implements Plugin<Project> {
 		setupRepository ()
 		setupArtifacts ()
 		setupJacoco ()
+		setupItTests ()
 		useJUnitplatorm ()
 	}
 
@@ -111,6 +114,42 @@ class TgPlugin implements Plugin<Project> {
 			reports {
 				csv.required = false
 				html.destination project.file ("${project.buildDir}/${project.tg.dirs.coverage}")
+			}
+		}
+	}
+
+	void setupItTests () {
+		project.sourceSets {
+			testIt
+		}
+
+		project.tasks.register ('it', Test) {
+			description = 'Runs integration tests.'
+			group = 'verification'
+
+			testClassesDirs = project.sourceSets.testIt.output.classesDirs
+			classpath = project.sourceSets.testIt.runtimeClasspath
+			shouldRunAfter project.test
+			dependsOn project.assemble
+
+			useJUnitPlatform ()
+
+			systemProperty ('junit.jupiter.extensions.autodetection.enabled', true)
+		}
+
+		project.check.dependsOn 'it'
+
+		project.dependencies {
+			testItImplementation (
+				[ group: 'org.hamcrest', name: 'hamcrest', version: '[2,)' ],
+				[ group: 'org.junit.jupiter', name: 'junit-jupiter', version: '[5,)' ]
+			)
+		}
+
+		project.idea {
+			module {
+				testSourceDirs += project.sourceSets.testIt.java.srcDirs
+				testResourceDirs += project.sourceSets.testIt.resources.srcDirs
 			}
 		}
 	}
