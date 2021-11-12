@@ -35,6 +35,7 @@ class TgPlugin implements Plugin<Project> {
 		setupRepository ()
 		setupArtifacts ()
 		setupJacoco ()
+		useJUnitplatorm ()
 	}
 
 	void setupRepository () {
@@ -111,6 +112,20 @@ class TgPlugin implements Plugin<Project> {
 				csv.required = false
 				html.destination project.file ("${project.buildDir}/${project.tg.dirs.coverage}")
 			}
+		}
+	}
+
+	void useJUnitplatorm () {
+		project.dependencies {
+			testImplementation (
+				[ group: 'org.hamcrest', name: 'hamcrest', version: '[2,)' ],
+				[ group: 'org.junit.jupiter', name: 'junit-jupiter', version: '[5,)' ],
+				[ group: 'org.mockito', name: 'mockito-core', version: '[2,)' ]
+			)
+		}
+
+		project.test {
+			useJUnitPlatform ()
 		}
 	}
 
