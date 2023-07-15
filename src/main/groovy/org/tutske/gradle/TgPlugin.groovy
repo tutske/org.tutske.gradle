@@ -113,7 +113,7 @@ class TgPlugin implements Plugin<Project> {
 		project.jacocoTestReport {
 			reports {
 				csv.required = false
-				html.destination project.file ("${project.buildDir}/${project.tg.dirs.coverage}")
+				html.outputLocation = project.file ("${project.buildDir}/${project.tg.dirs.coverage}")
 			}
 		}
 	}
@@ -140,6 +140,7 @@ class TgPlugin implements Plugin<Project> {
 		project.check.dependsOn 'it'
 
 		project.dependencies {
+			testItRuntimeOnly ([ group: 'org.junit.platform', name: 'junit-platform-launcher', version: '[1,)' ])
 			testItImplementation (
 				[ group: 'org.hamcrest', name: 'hamcrest', version: '[2,)' ],
 				[ group: 'org.junit.jupiter', name: 'junit-jupiter', version: '[5,)' ]
@@ -156,6 +157,7 @@ class TgPlugin implements Plugin<Project> {
 
 	void useJUnitplatorm () {
 		project.dependencies {
+			testRuntimeOnly ([ group: 'org.junit.platform', name: 'junit-platform-launcher', version: '[1,)' ])
 			testImplementation (
 				[ group: 'org.hamcrest', name: 'hamcrest', version: '[2,)' ],
 				[ group: 'org.junit.jupiter', name: 'junit-jupiter', version: '[5,)' ],

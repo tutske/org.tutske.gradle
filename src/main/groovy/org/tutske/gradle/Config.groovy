@@ -58,7 +58,7 @@ class Config {
 		dirs.deps = "${-> stripTrailingSlash (findProperty ('dirs.deps', '/build/libs'))}"
 		dirs.coverage = "${-> stripTrailingSlash (findProperty ('dirs.coverage', '/reports/coverage'))}"
 
-		tools.jacocoVersion = "${-> findProperty ("tools.jacoco.version", "")}"
+		tools.jacocoVersion = "${-> findProperty ("tools.jacoco.version", "0.8.10")}"
 
 		nexus.location = "${-> stripTrailingSlash (findProperty ('nexus.url', 'https://nexus.tutske.org:10443/repository'))}"
 		nexus.username = "${-> findProperty ('nexus.username', 'builder')}"
