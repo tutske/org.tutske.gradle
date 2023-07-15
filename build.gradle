@@ -7,8 +7,8 @@ plugins {
 group = 'org.tutske.gradle'
 version = 'git describe --dirty'.execute ().text.trim ();
 
-java.sourceCompatibility = JavaVersion.VERSION_11
-java.targetCompatibility = JavaVersion.VERSION_11
+java.sourceCompatibility = JavaVersion.VERSION_17
+java.targetCompatibility = JavaVersion.VERSION_17
 
 gradlePlugin {
 	plugins {
