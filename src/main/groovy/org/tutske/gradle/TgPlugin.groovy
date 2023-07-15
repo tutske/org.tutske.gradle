@@ -113,7 +113,7 @@ class TgPlugin implements Plugin<Project> {
 		project.jacocoTestReport {
 			reports {
 				csv.required = false
-				html.destination project.file ("${project.buildDir}/${project.tg.dirs.coverage}")
+				html.outputLocation = project.file ("${project.buildDir}/${project.tg.dirs.coverage}")
 			}
 		}
 	}
